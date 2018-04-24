@@ -445,7 +445,7 @@ function performSubmit() {
         response = xhttp.responseText;
         res = JSON.parse(response);
         // console.log("here was successfully parsed response!", res);
-        res2 = removeProperties(res, "id", "log_id"); // convert(res);
+        res2 = removeProperties(res, "id", "log_id", "auto_inc"); // convert(res);
         convertToTable($("#everythingTable"), res2, false, [
           { col: 6, dir: "desc" }
         ]);
