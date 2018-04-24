@@ -445,9 +445,9 @@ function performSubmit() {
         response = xhttp.responseText;
         res = JSON.parse(response);
         // console.log("here was successfully parsed response!", res);
-        res2 = removeProperties(res, "id", "log_id", "auto_inc"); // convert(res);
+        res2 = removeProperties(res, "id", "log_id", "auto_inc", "timestamp"); // convert(res);
         convertToTable($("#everythingTable"), res2, false, [
-          { col: 6, dir: "desc" }
+          { col: 0, dir: "desc" }
         ]);
       } catch (e) {
         console.log("failed to parse response: " + response);
@@ -459,12 +459,20 @@ function performSubmit() {
 
         getUniquesWCountAndMostRecentPromise(clone(res2, false), "song")
           .then(playTable => {
+            playTable = removeProperties(
+              playTable,
+              "djrealname",
+              "djname",
+              "program"
+            );
             let statsPromise = getStatsPromise(res2, playTable);
+            // console.log("play table length-1", playTable[0]);
+            // xjj = playTable[0];
             let songTablePromise = convertToTablePromise(
               $("#songTable"),
               playTable,
               false,
-              [{ col: 11, dir: "desc" }]
+              [{ col: Object.keys(playTable[0]).length - 1, dir: "desc" }]
             );
             let artistTablePromise = consolidatePromise(
               clone(playTable, false),
@@ -475,13 +483,14 @@ function performSubmit() {
                 "rotation",
                 "album",
                 "song",
-                "user_agent"
+                "user_agent",
+                "song_length"
               );
               return convertToTablePromise(
                 $("#artistTable"),
                 artistTable,
                 false,
-                [{ col: 8, dir: "desc" }]
+                [{ col: Object.keys(artistTable[0]).length - 1, dir: "desc" }]
               );
             });
 
@@ -491,12 +500,17 @@ function performSubmit() {
             ).then(albumTable => {
               // console.log("albumTable:\n");
               // console.log(albumTable);
-              albumTable = removeProperties(albumTable, "song", "user_agent");
+              albumTable = removeProperties(
+                albumTable,
+                "song",
+                "user_agent",
+                "song_length"
+              );
               return convertToTablePromise(
                 $("#albumTable"),
                 albumTable,
                 false,
-                [{ col: 10, dir: "desc" }]
+                [{ col: Object.keys(albumTable[0]).length - 1, dir: "desc" }]
               );
             });
 
