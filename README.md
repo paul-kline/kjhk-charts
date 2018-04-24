@@ -1,5 +1,7 @@
 # kjhk-charts
-Generate and view music played on KJHK.
+This page generates an aggregation of information about the music played on KJHK for the given interval of time.
+Useful for creating charts info. 
 
-View live:
+
+View live here:
  https://paul-kline.github.io/kjhk-charts/
